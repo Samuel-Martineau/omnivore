@@ -2592,6 +2592,39 @@ const schema = gql`
     email: String!
   }
 
+  union FeedsResult = FeedsSuccess | FeedsError
+
+  type FeedsSuccess {
+    edges: [FeedEdge!]!
+    pageInfo: PageInfo!
+  }
+
+  type FeedEdge {
+    cursor: String!
+    node: Feed!
+  }
+
+  type FeedsError {
+    errorCodes: [FeedsErrorCode!]!
+  }
+
+  enum FeedsErrorCode {
+    UNAUTHORIZED
+    BAD_REQUEST
+  }
+
+  type Feed {
+    id: ID!
+    title: String!
+    url: String!
+    description: String
+    image: String
+    createdAt: Date!
+    updatedAt: Date!
+    publishedAt: Date
+    author: String
+  }
+
   # Mutations
   type Mutation {
     googleLogin(input: GoogleLoginInput!): LoginResult!
@@ -2753,6 +2786,12 @@ const schema = gql`
     filters: FiltersResult!
     groups: GroupsResult!
     recentEmails: RecentEmailsResult!
+    feeds(
+      after: String
+      first: Int
+      query: String!
+      sort: SortParams
+    ): FeedsResult!
   }
 `
 

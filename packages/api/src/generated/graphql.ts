@@ -790,6 +790,13 @@ export enum FeedsErrorCode {
   Unauthorized = 'UNAUTHORIZED'
 }
 
+export type FeedsInput = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  query: Scalars['String'];
+  sort?: InputMaybe<SortParams>;
+};
+
 export type FeedsResult = FeedsError | FeedsSuccess;
 
 export type FeedsSuccess = {
@@ -1793,10 +1800,7 @@ export type QueryArticleSavingRequestArgs = {
 
 
 export type QueryFeedsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  query: Scalars['String'];
-  sort?: InputMaybe<SortParams>;
+  input: FeedsInput;
 };
 
 
@@ -3502,6 +3506,7 @@ export type ResolversTypes = {
   FeedEdge: ResolverTypeWrapper<FeedEdge>;
   FeedsError: ResolverTypeWrapper<FeedsError>;
   FeedsErrorCode: FeedsErrorCode;
+  FeedsInput: FeedsInput;
   FeedsResult: ResolversTypes['FeedsError'] | ResolversTypes['FeedsSuccess'];
   FeedsSuccess: ResolverTypeWrapper<FeedsSuccess>;
   Filter: ResolverTypeWrapper<Filter>;
@@ -3984,6 +3989,7 @@ export type ResolversParentTypes = {
   FeedArticlesSuccess: FeedArticlesSuccess;
   FeedEdge: FeedEdge;
   FeedsError: FeedsError;
+  FeedsInput: FeedsInput;
   FeedsResult: ResolversParentTypes['FeedsError'] | ResolversParentTypes['FeedsSuccess'];
   FeedsSuccess: FeedsSuccess;
   Filter: Filter;
@@ -5337,7 +5343,7 @@ export type QueryResolvers<ContextType = ResolverContext, ParentType extends Res
   article?: Resolver<ResolversTypes['ArticleResult'], ParentType, ContextType, RequireFields<QueryArticleArgs, 'slug' | 'username'>>;
   articleSavingRequest?: Resolver<ResolversTypes['ArticleSavingRequestResult'], ParentType, ContextType, Partial<QueryArticleSavingRequestArgs>>;
   deviceTokens?: Resolver<ResolversTypes['DeviceTokensResult'], ParentType, ContextType>;
-  feeds?: Resolver<ResolversTypes['FeedsResult'], ParentType, ContextType, RequireFields<QueryFeedsArgs, 'query'>>;
+  feeds?: Resolver<ResolversTypes['FeedsResult'], ParentType, ContextType, RequireFields<QueryFeedsArgs, 'input'>>;
   filters?: Resolver<ResolversTypes['FiltersResult'], ParentType, ContextType>;
   getUserPersonalization?: Resolver<ResolversTypes['GetUserPersonalizationResult'], ParentType, ContextType>;
   groups?: Resolver<ResolversTypes['GroupsResult'], ParentType, ContextType>;

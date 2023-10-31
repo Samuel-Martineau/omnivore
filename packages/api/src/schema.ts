@@ -2594,8 +2594,8 @@ const schema = gql`
 
   input FeedsInput {
     after: String
-    first: Int @sanitize(minLength: 1, maxLength: 100)
-    query: String! @sanitize(maxLength: 255)
+    first: Int
+    query: String @sanitize(maxLength: 255)
     sort: SortParams
   }
 
@@ -2630,6 +2630,46 @@ const schema = gql`
     updatedAt: Date!
     publishedAt: Date
     author: String
+  }
+
+  union FollowingResult = FollowingSuccess | FollowingError
+
+  type FollowingSuccess {
+    edges: [FollowingEdge!]!
+    pageInfo: PageInfo!
+  }
+
+  type FollowingEdge {
+    cursor: String!
+    node: Following!
+  }
+
+  type FollowingError {
+    errorCodes: [FollowingErrorCode!]!
+  }
+
+  enum FollowingErrorCode {
+    UNAUTHORIZED
+    BAD_REQUEST
+  }
+
+  type Following {
+    id: ID!
+    feedItemId: ID!
+    title: String!
+    links: [String!]!
+    author: String
+    summary: String
+    categories: [String!]
+    content: String
+    previewContent: String
+    createdAt: Date!
+    updatedAt: Date!
+    savedAt: Date
+    hiddenAt: Date
+    publishedAt: Date
+    isHidden: Boolean!
+    isSaved: Boolean!
   }
 
   # Mutations
@@ -2794,6 +2834,12 @@ const schema = gql`
     groups: GroupsResult!
     recentEmails: RecentEmailsResult!
     feeds(input: FeedsInput!): FeedsResult!
+    following(
+      after: String
+      first: Int
+      since: Date
+      until: Date
+    ): FollowingResult!
   }
 `
 
